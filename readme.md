@@ -22,3 +22,29 @@ Crawler data được ứng dụng trong nhiều lĩnh vực:
 - **Hiệu suất**: Crawler cần được tối ưu hóa để không gây quá tải cho trang web nguồn.
 
 ## 5. Python
+Tạo một đoạn mã python đơn giản với thư viện requests, BeautifulSoup, csv để lấy dữ liệu từ https://vnexpress.net/ sau đó đọc và viết những dữ liệu cần thiết vào file csv.
+
+```python
+import  requests
+from  bs4  import  BeautifulSoup
+import  csv
+
+url  =  "https://vnexpress.net/"
+response  =  requests.get(url)
+
+if  response.status_code  ==  200:
+	soup  =  BeautifulSoup(response.text, 'html.parser')
+	articles  =  soup.find_all('h3', class_='title-news')
+
+	with  open('vnexpress_articles.csv', mode='w', newline='', encoding='utf-8') as  file:
+		writer  =  csv.writer(file)
+		writer.writerow(['Title', 'URL'])
+
+		for  article  in  articles:
+			title  =  article.text.strip()
+			link  =  article.a['href']
+			writer.writerow([title, link])
+
+		print("'vnexpress_articles.csv' đã được lưu.")
+```
+Đoạn mã trên sẽ trả về file vnexpress_articles.csv.
